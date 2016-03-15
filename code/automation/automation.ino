@@ -9,7 +9,7 @@ int state=0;
 int flag=0;
 
 
- static int frequenc = 255;
+ static int frequenc = 0;
  
 int dataFromBt;
  
@@ -55,44 +55,33 @@ void loop()
  digitalWrite(led, LOW);
 
  }
+ 
+ if(dataFromBt == 'a' && frequenc == 0 ){
+ 
+ Serial.println("buzzer on");
+ frequenc += 255;
+ tone(buzzer,frequenc);
+ delay(1);
+ }
 
- if(dataFromBt == 'a'){
+ 
+  if(dataFromBt == 'a' && frequenc > 0 ){
  Serial.println("buzzer off");
- tone(buzzer,0,1000);
- //digitalWrite(buzzer, 255);
- 
- }
- 
- if(dataFromBt == 'b'){
- Serial.println("buzzer on");
- tone(buzzer,1255);
+ tone(buzzer,frequenc);
  //digitalWrite(buzzer, 255);
  delay(1);
  }
  
-  if(dataFromBt == 'c'){
- Serial.println("buzzer on");
- tone(buzzer,2255);
- //digitalWrite(buzzer, 1000);
- delay(1);
- }
- 
- if(dataFromBt == 'd')
+ if(dataFromBt == '+')
  {
-    
+    frequenc += 1000; 
     tone(buzzer, frequenc);
-    frequenc += 1000;
-
-
  }
 
- if(dataFromBt == 'e')
+ if(dataFromBt == '-')
  {
-    
+    frequenc -= 1000;  
     tone(buzzer, frequenc);
-    frequenc -= 1000;
-
-
  }
  }
  
