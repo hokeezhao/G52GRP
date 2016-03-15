@@ -4,25 +4,34 @@ int bluetoothTx = 2; // TX-O pin of bluetooth mate, Arduino D2
 int bluetoothRx = 3; // RX-I pin of bluetooth mate, Arduino D3
  
 int led = 12;
- int buzzer=11;
- 
+int buzzer=11;
+int state=0;
+int flag=0;
+
+
+ static int frequenc = 255;
  
 int dataFromBt;
  
 boolean lightBlink = false;
 
- 
+  
 SoftwareSerial bluetooth(bluetoothTx, bluetoothRx);
  
 void setup()
 {
- Serial.begin(9600); // Begin the serial monitor at 9600bps
- 
  bluetooth.begin(115200); // The Bluetooth Mate defaults to 115200bps
  delay(100); // Short delay, wait for the Mate to send back CMD
  bluetooth.begin(9600); // Start bluetooth serial at 9600
- pinMode(led, OUTPUT);
+
+
+ 
  pinMode(buzzer,OUTPUT);
+pinMode(led, OUTPUT);
+digitalWrite(led,HIGH);
+
+Serial.begin(9600); // Begin the serial monitor at 9600bps
+ 
 
 }
  
@@ -39,27 +48,52 @@ void loop()
  if(dataFromBt == '0'){
  Serial.println("led on");
  digitalWrite(led, HIGH);
- bluetooth.print("1");
+ 
  }
  if(dataFromBt == '1'){
  Serial.println("led off");
  digitalWrite(led, LOW);
- bluetooth.print("0");
+
  }
 
  if(dataFromBt == 'a'){
- Serial.println("led on");
- digitalWrite(buzzer, HIGH);
-delay(1);
+ Serial.println("buzzer off");
+ tone(buzzer,0,1000);
+ //digitalWrite(buzzer, 255);
+ 
  }
  
  if(dataFromBt == 'b'){
- Serial.println("led on");
- digitalWrite(buzzer, LOW);
-delay(1);
+ Serial.println("buzzer on");
+ tone(buzzer,1255);
+ //digitalWrite(buzzer, 255);
+ delay(1);
  }
  
+  if(dataFromBt == 'c'){
+ Serial.println("buzzer on");
+ tone(buzzer,2255);
+ //digitalWrite(buzzer, 1000);
+ delay(1);
+ }
  
+ if(dataFromBt == 'd')
+ {
+    
+    tone(buzzer, frequenc);
+    frequenc += 1000;
+
+
+ }
+
+ if(dataFromBt == 'e')
+ {
+    
+    tone(buzzer, frequenc);
+    frequenc -= 1000;
+
+
+ }
  }
  
  if(Serial.available()) // If stuff was typed in the serial monitor
